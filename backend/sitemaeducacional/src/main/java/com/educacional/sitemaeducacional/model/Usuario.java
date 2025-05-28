@@ -3,9 +3,6 @@ package com.educacional.sitemaeducacional.model;
 
 import jakarta.persistence.*;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-
-import java.util.List;
 import java.util.Set;
 
 @Entity
