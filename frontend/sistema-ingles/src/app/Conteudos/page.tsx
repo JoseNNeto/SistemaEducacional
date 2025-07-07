@@ -5,30 +5,49 @@ import ContentDashboard from '@/components/ContentDashboard';
 
 // Função de exemplo para buscar dados. No seu projeto, você usaria fetch ou axios.
 // Lembre-se de enviar o token JWT no cabeçalho da requisição!
+
+type Conteudo = {
+  id: number;
+  nome: string;
+};
+
 async function getConteudosData() {
-  // const responseConteudos = await fetch('http://localhost:8080/api/conteudos', { headers: { 'Authorization': `Bearer ${token}` } });
-  // const conteudos = await responseConteudos.json();
-  
-  // const responseNiveis = await fetch('http://localhost:8080/api/niveis', { headers: { 'Authorization': `Bearer ${token}` } });
-  // const niveis = await responseNiveis.json();
-  
-  // Por enquanto, vamos usar dados de exemplo (mock)
-  const niveis = [
-    { id: 1, descricao: 'Iniciante' },
-    { id: 2, descricao: 'Intermediário' },
-    { id: 3, descricao: 'Avançado' },
-  ];
+  const cookieStore = cookies();
+  const token = cookieStore.get('authToken')?.value;
 
-  const conteudos = [
-    { id: 1, nome: 'Adjetivos comuns e demonstrativos', nivel: niveis[0], progresso: '0/10' },
-    { id: 2, nome: 'Preposições de tempo e lugar', nivel: niveis[0], progresso: '0/8' },
-    { id: 3, nome: 'Passado contínuo e perfeito', nivel: niveis[1], progresso: '0/10' },
-    { id: 4, nome: 'Presente perfeito contínuo', nivel: niveis[1], progresso: '0/10' },
-    { id: 5, nome: 'Tempos verbais de narrativa', nivel: niveis[2], progresso: '0/10' },
-    { id: 6, nome: 'Todas as formas de voz passiva', nivel: niveis[2], progresso: '0/10' },
-  ];
+  // Se não houver token, não podemos buscar os dados.
+  // No futuro, você pode redirecionar para o login aqui.
+  if (!token) {
+    console.warn("Token de autenticação não encontrado nos cookies.");
+    return { niveis: [], conteudos: [] };
+  }
 
-  return { niveis, conteudos };
+  // Monta o cabeçalho de autorização
+  const headers = {
+    'Authorization': `Bearer ${token}`,
+  };
+
+  try {
+    // Busca os dados dos endpoints em paralelo
+    const [resConteudos, resNiveis] = await Promise.all([
+      fetch('http://localhost:8080/api/conteudos', { headers }),
+      fetch('http://localhost:8080/api/niveis', { headers })
+    ]);
+
+    // Verifica se as respostas da rede foram bem-sucedidas
+    if (!resConteudos.ok) throw new Error(`Falha ao buscar conteúdos: ${resConteudos.statusText}`);
+    if (!resNiveis.ok) throw new Error(`Falha ao buscar níveis: ${resNiveis.statusText}`);
+
+    const conteudos: Conteudo[] = await resConteudos.json();
+    const niveis: Nivel[] = await resNiveis.json();
+
+    return { niveis, conteudos };
+
+  } catch (error) {
+    console.error("Erro na integração com o backend:", error);
+    // Retorna dados vazios em caso de erro para a página não quebrar
+    return { niveis: [], conteudos: [] };
+  }
 }
 
 // Esta é uma página assíncrona (Server Component)
@@ -42,7 +61,7 @@ export default async function ConteudosPage() {
       <Header />
       <Container component="main" sx={{ mt: 4, mb: 4, flexGrow: 1 }}>
         <Typography variant="h4" component="h1" gutterBottom sx={{ fontWeight: 'bold' }}>
-          Ferramenta Educacional
+          Conteúdos Disponíveis
         </Typography>
         
         {/* Renderiza o componente de cliente, passando os dados como props */}
