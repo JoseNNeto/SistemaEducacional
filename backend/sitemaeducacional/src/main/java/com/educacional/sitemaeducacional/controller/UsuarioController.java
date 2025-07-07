@@ -36,11 +36,11 @@ public class UsuarioController {
         return ResponseEntity.ok(usuarios);
     }
 
-    @PostMapping
-    public ResponseEntity<Usuario> createUsuario(@RequestBody Usuario usuario) {
-        Usuario createdUsuario = usuarioService.addUsuario(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(createdUsuario);
-    }
+    // @PostMapping
+    // public ResponseEntity<Usuario> createUsuario(@RequestBody Usuario usuario) {
+    //     Usuario createdUsuario = usuarioService.addUsuario(usuario);
+    //     return ResponseEntity.status(HttpStatus.CREATED).body(createdUsuario);
+    // }
 
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> updateUsuario(@RequestBody Usuario usuarioDetails, Long id) {

@@ -1,5 +1,7 @@
 package com.educacional.sitemaeducacional.repository;
 
+import java.util.Optional;
+
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
@@ -10,5 +12,6 @@ public interface TemaRepository extends JpaRepository<Tema, Long> {
     // Aqui você pode adicionar métodos personalizados de consulta, se necessário.
     // Por exemplo, para encontrar um tema por nome:
     // Optional<Tema> findByNome(String nome);
+    Optional<Tema> findByNomeIgnoreCase(String nome);
     
 }

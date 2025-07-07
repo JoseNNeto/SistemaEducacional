@@ -4,13 +4,15 @@ INSERT INTO nivel (id, codigo, descricao) VALUES (2, 'N002', 'Intermediário');
 INSERT INTO nivel (id, codigo, descricao) VALUES (3, 'N003', 'Avançado');
 
 -- Inserts para a tabela TEMA
-INSERT INTO tema (id, nome) VALUES (1, 'Viagens e Turismo');
-INSERT INTO tema (id, nome) VALUES (2, 'Comida e Culinária');
-INSERT INTO tema (id, nome) VALUES (3, 'Trabalho e Carreira');
+INSERT INTO tema (id, nome) VALUES (1, 'Pronouns ("I", "me", etc)');
+INSERT INTO tema (id, nome) VALUES (2, 'Present Simple ("to be")');
+INSERT INTO tema (id, nome) VALUES (3, 'Articles (& "this", "that")');
+INSERT INTO tema (id, nome) VALUES (4, 'Present Simple ("to have" & others verbs)');
+INSERT INTO tema (id, nome) VALUES (5, 'Adverbs of frequency');
 
 -- Inserts para a tabela USUARIO
-INSERT INTO usuario (id, nome, email, senha) VALUES (1, 'Neto Entusiasta', 'neto@email.com', 'senha123');
-INSERT INTO usuario (id, nome, email, senha) VALUES (2, 'Maria Estudiosa', 'maria@email.com', 'senha456');
+-- INSERT INTO usuario (id, nome, email, senha) VALUES (1, 'Neto Entusiasta', 'neto@email.com', '$2a$10$3y.gS1s1o.9R2f.Uq5S7IuYy29iC3iG4pUaHlSg8m.gU4s.G5C/2');
+-- INSERT INTO usuario (id, nome, email, senha) VALUES (2, 'Maria Estudiosa', 'maria@email.com', 'senha456');
 
 -- Inserts para a tabela PALAVRA
 INSERT INTO palavra (id, termo, traducao, etimologia, significado) VALUES (1, 'Hello', 'Olá', 'Origem: Old English "hālōw"', 'Uma saudação comum.');
@@ -61,24 +63,24 @@ INSERT INTO pergunta (id, texto, key_field1, conteudo_id, recurso_id) VALUES (3,
 
 -- Inserts para as tabelas de junção (ManyToMany de Usuario)
 -- USUARIO_CONTEUDOS_APRENDIDOS
-INSERT INTO usuario_conteudos_aprendidos (usuario_id, conteudo_id) VALUES (1, 1); -- Neto aprendeu Conteudo 1
-INSERT INTO usuario_conteudos_aprendidos (usuario_id, conteudo_id) VALUES (2, 1); -- Maria aprendeu Conteudo 1
-INSERT INTO usuario_conteudos_aprendidos (usuario_id, conteudo_id) VALUES (2, 2); -- Maria aprendeu Conteudo 2
+-- INSERT INTO usuario_conteudos_aprendidos (usuario_id, conteudo_id) VALUES (1, 1); -- Neto aprendeu Conteudo 1
+-- INSERT INTO usuario_conteudos_aprendidos (usuario_id, conteudo_id) VALUES (2, 1); -- Maria aprendeu Conteudo 1
+-- INSERT INTO usuario_conteudos_aprendidos (usuario_id, conteudo_id) VALUES (2, 2); -- Maria aprendeu Conteudo 2
 
--- USUARIO_NIVEIS_COMPLETOS
-INSERT INTO usuario_niveis_completos (usuario_id, nivel_id) VALUES (1, 1); -- Neto completou Nivel Básico
+-- -- USUARIO_NIVEIS_COMPLETOS
+-- INSERT INTO usuario_niveis_completos (usuario_id, nivel_id) VALUES (1, 1); -- Neto completou Nivel Básico
 
--- USUARIO_QUIZ_FEITO
-INSERT INTO usuario_quiz_feito (usuario_id, quiz_id) VALUES (1, 1); -- Neto fez o Quiz 1
-INSERT INTO usuario_quiz_feito (usuario_id, quiz_id) VALUES (1, 2); -- Neto fez o Quiz 2
+-- -- USUARIO_QUIZ_FEITO
+-- INSERT INTO usuario_quiz_feito (usuario_id, quiz_id) VALUES (1, 1); -- Neto fez o Quiz 1
+-- INSERT INTO usuario_quiz_feito (usuario_id, quiz_id) VALUES (1, 2); -- Neto fez o Quiz 2
 
--- USUARIO_PERGUNTA_FEITA
-INSERT INTO usuario_pergunta_feita (usuario_id, pergunta_id) VALUES (1, 1); -- Neto respondeu a Pergunta 1
+-- -- USUARIO_PERGUNTA_FEITA
+-- INSERT INTO usuario_pergunta_feita (usuario_id, pergunta_id) VALUES (1, 1); -- Neto respondeu a Pergunta 1
 
--- USUARIO_RECURSO_FEITO (Supondo que "feito" significa que o usuário interagiu/visualizou)
-INSERT INTO usuario_recurso_feito (usuario_id, recurso_id) VALUES (1, 1); -- Neto viu o Recurso 1
+-- -- USUARIO_RECURSO_FEITO (Supondo que "feito" significa que o usuário interagiu/visualizou)
+-- INSERT INTO usuario_recurso_feito (usuario_id, recurso_id) VALUES (1, 1); -- Neto viu o Recurso 1
 
--- USUARIO_PALAVRAS_APRENDIDAS
-INSERT INTO usuario_palavras_aprendidas (usuario_id, palavra_id) VALUES (1, 1); -- Neto aprendeu "Hello"
-INSERT INTO usuario_palavras_aprendidas (usuario_id, palavra_id) VALUES (1, 2); -- Neto aprendeu "Food"
-INSERT INTO usuario_palavras_aprendidas (usuario_id, palavra_id) VALUES (2, 1); -- Maria aprendeu "Hello"
+-- -- USUARIO_PALAVRAS_APRENDIDAS
+-- INSERT INTO usuario_palavras_aprendidas (usuario_id, palavra_id) VALUES (1, 1); -- Neto aprendeu "Hello"
+-- INSERT INTO usuario_palavras_aprendidas (usuario_id, palavra_id) VALUES (1, 2); -- Neto aprendeu "Food"
+-- INSERT INTO usuario_palavras_aprendidas (usuario_id, palavra_id) VALUES (2, 1); -- Maria aprendeu "Hello"
