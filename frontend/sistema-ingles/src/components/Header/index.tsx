@@ -27,7 +27,7 @@ export default function Header() {
     localStorage.removeItem('authToken');
     handleClose();
     // Redireciona para a página de login
-    router.push('/login');
+    router.push('/');
   };
 
   return (

@@ -1,11 +1,20 @@
 package com.educacional.sitemaeducacional.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "pergunta")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Pergunta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +31,7 @@ public class Pergunta {
 
     @ManyToOne
     @JoinColumn(name = "conteudo_id") // FK Conteudo
+    @JsonBackReference
     private Conteudo conteudo;
 
     @ManyToOne // Uma pergunta pode ter um recurso opcional

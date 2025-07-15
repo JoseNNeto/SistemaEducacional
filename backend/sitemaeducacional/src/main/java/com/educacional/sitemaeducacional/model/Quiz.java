@@ -1,13 +1,22 @@
 package com.educacional.sitemaeducacional.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.List;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 @Entity
 @Table(name = "quiz") // Ou QuestaoMultiplaEscolha
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Quiz {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,6 +34,7 @@ public class Quiz {
 
     @ManyToOne
     @JoinColumn(name = "conteudo_id") // FK Conteudo
+    @JsonBackReference
     private Conteudo conteudo;
 
     @ManyToOne // Um quiz pode ter um recurso opcional

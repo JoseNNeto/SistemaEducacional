@@ -1,13 +1,19 @@
 package com.educacional.sitemaeducacional.model;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.util.Set;
 
 @Entity
 @Table(name = "conteudo")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Conteudo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,5 +37,4 @@ public class Conteudo {
     @ManyToOne
     @JoinColumn(name = "tema_id", nullable = true) // Sugestão: Conteúdo pode ter um Tema
     private Tema tema;
-
 }

@@ -1,28 +1,37 @@
 package com.educacional.sitemaeducacional.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "recurso")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Recurso {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // O campo 'fk tipo' no diagrama. Se for uma string simples:
-    private String tipo; 
-    // Se 'tipo' fosse uma entidade separada TipoRecurso:
-    // @ManyToOne
-    // @JoinColumn(name = "tipo_recurso_id")
-    // private TipoRecurso tipo;
+    private String tipo; // Ex: "video", "exercicio", "musica", "vocabulario"
+    private String url;  // Pode ser o link do vídeo ou outro recurso
 
-    private String url;
-    private boolean legenda; // bool legenda
+    @Column(columnDefinition = "TEXT")
+    private String legenda; 
+
+    @Column(columnDefinition = "TEXT") // Bom para textos longos
+    private String letra; // NOVO CAMPO PARA A LETRA DA MÚSICA
 
     @ManyToOne
-    @JoinColumn(name = "conteudo_id", nullable = true) // Adicionando a FK para Conteudo
+    @JoinColumn(name = "conteudo_id")
+    @JsonBackReference
     private Conteudo conteudo;
 
 }

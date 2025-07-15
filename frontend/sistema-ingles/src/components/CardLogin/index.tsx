@@ -56,7 +56,7 @@ export default function LoginForm() {
           boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.2)',
         }}
       > 
-        <Typography component="h1" variant="h5" color="text.primary">
+        <Typography component="h1" variant="h5" color="white">
           Login
         </Typography>
         
@@ -73,13 +73,13 @@ export default function LoginForm() {
             autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            InputLabelProps={{ style: { color: 'text.secondary' } }}
+            InputLabelProps={{ style: { color: 'white' } }}
             sx={{
               '& .MuiOutlinedInput-root': {
                 '& fieldset': { borderColor: '#42a5f5' },
                 '&:hover fieldset': { borderColor: '#90caf9' },
                 '&.Mui-focused fieldset': { borderColor: 'secondary.main' },
-                '& input': { color: 'text.primary' },
+                '& input': { color: 'white' },
               },
             }}
           />
@@ -95,13 +95,13 @@ export default function LoginForm() {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            InputLabelProps={{ style: { color: 'text.secondary' } }}
+            InputLabelProps={{ style: { color: 'white' } }}
             sx={{
               '& .MuiOutlinedInput-root': {
                 '& fieldset': { borderColor: '#42a5f5' },
                 '&:hover fieldset': { borderColor: '#90caf9' },
                 '&.Mui-focused fieldset': { borderColor: 'secondary.main' },
-                '& input': { color: 'text.primary' },
+                '& input': { color: 'white' },
               },
             }}
           />

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.educacional.sitemaeducacional.dto.ConteudoCompletoDTO;
 import com.educacional.sitemaeducacional.model.Conteudo;
 import com.educacional.sitemaeducacional.service.ConteudoService;
 
@@ -59,5 +60,10 @@ public class ConteudoController {
     public ResponseEntity<Void> deleteConteudo(@PathVariable Long id) {
         conteudoService.deleteConteudo(id);
         return ResponseEntity.noContent().build(); // Retorna 204 No Content, indicando sucesso na exclusão
+    }
+
+    @GetMapping("/{id}/completo")
+    public ResponseEntity<ConteudoCompletoDTO> getConteudoCompleto(@PathVariable Long id) {
+        return ResponseEntity.ok(conteudoService.getConteudoCompletoById(id));
     }
 }

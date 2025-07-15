@@ -1,9 +1,19 @@
 package com.educacional.sitemaeducacional.service;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import com.educacional.sitemaeducacional.dto.ConteudoCompletoDTO;
+import com.educacional.sitemaeducacional.dto.NivelDTO;
+import com.educacional.sitemaeducacional.dto.QuizDTO;
+import com.educacional.sitemaeducacional.dto.RecursoDTO;
+import com.educacional.sitemaeducacional.dto.TemaDTO;
+import com.educacional.sitemaeducacional.dto.VocabularioDTO;
 import com.educacional.sitemaeducacional.model.Conteudo;
 import com.educacional.sitemaeducacional.repository.ConteudoRepository;
 
@@ -54,5 +64,87 @@ public class ConteudoService {
             throw new EntityNotFoundException("Conteúdo não encontrado com o ID: " + id);
         }
         conteudoRepository.deleteById(id);
+    }
+
+    @Transactional(readOnly = true) // Essencial para evitar erros de Lazy Loading
+    public ConteudoCompletoDTO getConteudoCompletoById(Long id) {
+        Conteudo conteudo = conteudoRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Conteúdo não encontrado com o ID: " + id));
+
+        return convertToCompletoDto(conteudo);
+    }
+
+    private ConteudoCompletoDTO convertToCompletoDto(Conteudo conteudo) {
+        ConteudoCompletoDTO dto = new ConteudoCompletoDTO();
+        dto.setId(conteudo.getId());
+        dto.setNome(conteudo.getNome());
+
+        // Mapeando Nivel (que será ignorado pelo front)
+        if (conteudo.getNivel() != null) {
+            NivelDTO nivelDto = new NivelDTO();
+            nivelDto.setId(conteudo.getNivel().getId());
+            nivelDto.setDescricao(conteudo.getNivel().getDescricao());
+            dto.setNivel(nivelDto);
+        }
+        
+        // Mapeando Tema
+        if (conteudo.getTema() != null) {
+            TemaDTO temaDto = new TemaDTO();
+            temaDto.setId(conteudo.getTema().getId());
+            temaDto.setNome(conteudo.getTema().getNome());
+            dto.setTema(temaDto);
+        }
+
+        // Mapeando Recursos (Vídeo/Música)
+        dto.setRecursos(conteudo.getRecursos().stream().map(recurso -> {
+            RecursoDTO recursoDto = new RecursoDTO();
+            recursoDto.setId(recurso.getId());
+            recursoDto.setUrl(recurso.getUrl());
+            recursoDto.setLegenda(recurso.getLegenda());
+            
+            // A lógica da "gambiarra"
+            boolean isMusica = "musica".equalsIgnoreCase(recurso.getTipo());
+            recursoDto.setMusica(isMusica);
+            if (isMusica) {
+                recursoDto.setLetra(recurso.getLetra());
+            }
+            
+            return recursoDto;
+        }).collect(Collectors.toSet()));
+
+        // Mapeando Quizzes para a tela de Exercício
+        dto.setQuizzes(conteudo.getQuizzes().stream().map(quiz -> {
+            QuizDTO quizDto = new QuizDTO();
+            quizDto.setId(quiz.getId());
+            quizDto.setTitulo(quiz.getTitulo());
+            quizDto.setRespostaCorreta(quiz.getCerta());
+
+            List<String> todasOpcoes = new ArrayList<>(quiz.getErradas());
+            todasOpcoes.add(quiz.getCerta());
+            Collections.shuffle(todasOpcoes);
+            quizDto.setOpcoes(todasOpcoes);
+            
+            return quizDto;
+        }).collect(Collectors.toSet()));
+
+        // Mapeando Perguntas para a tela de Vocabulário
+        dto.setVocabularios(conteudo.getPerguntas().stream().map(pergunta -> {
+            VocabularioDTO vocabularioDto = new VocabularioDTO();
+            vocabularioDto.setId(pergunta.getId());
+
+            // A lógica da "gambiarra": assume que o texto da pergunta é "palavra=tradução"
+            String[] partes = pergunta.getTexto().split("=", 2);
+            if (partes.length == 2) {
+                vocabularioDto.setPalavra(partes[0].trim());
+                vocabularioDto.setTraducao(partes[1].trim());
+            } else {
+                vocabularioDto.setPalavra(pergunta.getTexto());
+                vocabularioDto.setTraducao(""); // Deixa a tradução em branco se o formato for inesperado
+            }
+            
+            return vocabularioDto;
+        }).collect(Collectors.toSet()));
+
+        return dto;
     }
 }
