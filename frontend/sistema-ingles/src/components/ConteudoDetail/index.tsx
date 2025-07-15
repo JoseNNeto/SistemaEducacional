@@ -23,7 +23,7 @@ import MenuBookOutlinedIcon from '@mui/icons-material/MenuBookOutlined';
 import QuizOutlinedIcon from '@mui/icons-material/QuizOutlined';
 import HelpOutlineOutlinedIcon from '@mui/icons-material/HelpOutlineOutlined';
 
-// Tipos que esperamos do backend
+// Tipos do backend
 type RecursoDTO = { id: number; url: string; isMusica: boolean; letra: string; legenda: string; };
 type QuizDTO = { id: number; titulo: string; };
 type VocabularioDTO = { id: number; palavra: string; };
@@ -74,30 +74,7 @@ export default function ConteudoDetail({ conteudoId }: { conteudoId: string }) {
     };
 
     fetchData();
-  }, [conteudoId, router]); // Roda o efeito se o ID ou o router mudarem
-
-  // Unifica as listas só depois que os dados chegarem
-  const atividades = conteudo ? [
-    ...conteudo.recursos.map(r => ({
-      id: r.id,
-      tipo: r.isMusica ? 'musica' : 'video',
-      label: r.isMusica ? 'Música' : 'Vídeo',
-      href: r.isMusica ? `/Musica/${r.id}` : `/Videos/${r.id}`
-    })),
-    ...conteudo.quizzes.map(q => ({
-      id: q.id,
-      tipo: 'quiz',
-      label: `Exercício: ${q.titulo}`,
-      href: `/Exercicios/${q.id}`
-    })),
-    ...conteudo.vocabularios.map(v => ({
-      id: v.id,
-      tipo: 'vocabulario',
-      label: `Vocabulário: ${v.palavra}`,
-      href: `/Vocabulario/${v.id}`
-    }))
-  ] : [];
-
+  }, [conteudoId, router]); 
   if (loading) return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}><CircularProgress /></Box>;
   if (error) return <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>;
   if (!conteudo) return <Alert severity="warning" sx={{ mt: 2 }}>Nenhum dado de conteúdo para exibir.</Alert>;
@@ -120,7 +97,7 @@ export default function ConteudoDetail({ conteudoId }: { conteudoId: string }) {
             const isMusica = recurso.isMusica;
             const Icon = isMusica ? iconMap.musica : iconMap.video;
             const label = isMusica ? 'Música' : 'Vídeo';
-            const href = isMusica ? `/Musica/${recurso.id}` : `/Video/${recurso.id}`;
+            const href = isMusica ? `/Videos/${recurso.id}?conteudoId=${conteudo.id}` : `/Videos/${recurso.id}?conteudoId=${conteudo.id}`;
             
             return (
               <Grid size={{xs:12, sm:6, md:4}} key={`recurso-${recurso.id}`}>
@@ -134,31 +111,12 @@ export default function ConteudoDetail({ conteudoId }: { conteudoId: string }) {
             );
           })}
 
-          {/* ==================================================================== */}
-          {/* BLOCO 2: Renderiza um ÚNICO card para Exercícios, se existir algum */}
-          {/* ==================================================================== */}
           {conteudo.quizzes && conteudo.quizzes.length > 0 && (
             <Grid size={{xs:12, sm:6, md:4}} key="portal-exercicios">
-              {/* Por enquanto, o link leva para o primeiro exercício da lista */}
-              <Link href={`/Exercicios/${conteudo.quizzes[0].id}`} passHref style={{ textDecoration: 'none' }}>
+              <Link href={`/Exercicios/${conteudo.id}`} passHref style={{ textDecoration: 'none' }}>
                 <Paper elevation={2} sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1.5, backgroundColor: '#001f3f', color: 'white', cursor: 'pointer', '&:hover': { opacity: 0.9 } }}>
                   <QuizOutlinedIcon />
                   <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Exercícios</Typography>
-                </Paper>
-              </Link>
-            </Grid>
-          )}
-
-          {/* ==================================================================== */}
-          {/* BLOCO 3: Renderiza um ÚNICO card para Vocabulário, se existir algum */}
-          {/* ==================================================================== */}
-          {conteudo.vocabularios && conteudo.vocabularios.length > 0 && (
-            <Grid size={{xs:12, sm:6, md:4}} key="portal-vocabulario">
-              {/* Por enquanto, o link leva para o primeiro vocabulário da lista */}
-              <Link href={`/Vocabulario/${conteudo.vocabularios[0].id}`} passHref style={{ textDecoration: 'none' }}>
-                <Paper elevation={2} sx={{ p: 2, display: 'flex', alignItems: 'center', gap: 1.5, backgroundColor: '#001f3f', color: 'white', cursor: 'pointer', '&:hover': { opacity: 0.9 } }}>
-                  <HelpOutlineOutlinedIcon />
-                  <Typography variant="body1" sx={{ fontWeight: 'bold' }}>Vocabulário</Typography>
                 </Paper>
               </Link>
             </Grid>

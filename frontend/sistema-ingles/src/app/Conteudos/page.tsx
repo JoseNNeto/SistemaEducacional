@@ -3,10 +3,7 @@ import { Container, Box, Typography } from '@mui/material';
 import Header from '@/components/Header';
 import ContentDashboard from '@/components/ContentDashboard';
 
-// A página volta a ser um componente simples, não mais 'async'
 export default function ConteudosPage() {
-  
-  // A função de buscar dados foi completamente removida daqui!
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>

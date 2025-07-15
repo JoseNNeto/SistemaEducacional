@@ -3,9 +3,9 @@
 -- =======================================================================
 
 -- ADICIONANDO USUÁRIOS DE TESTE
-INSERT INTO usuario (id, nome, email, senha) VALUES (9, 'Neto Testador', 'neto@email.com', '$2a$10$3y.gS1s1o.9R2f.Uq5S7IuYy29iC3iG4pUaHlSg8m.gU4s.G5C/2');
-INSERT INTO usuario (id, nome, email, senha) VALUES (10, 'Usuário Padrão', 'user@user.com', '$2a$10$mI0bIIciz4YdG4B03d25qOQoAbGCrvqQlT3L2j2uSgU66jD4gVvJq');
-INSERT INTO usuario (id, nome, email, senha) VALUES (11, 'Maria Estudiosa', 'maria@email.com', '$2a$10$i.bS.1.j1e9d8n3B.l/T8uT0B3M.oF9Q.e3d0d.e0F.g3H.i0J.k');
+INSERT INTO usuario (id, nome, email, senha) VALUES (9, 'Neto Testador', 'neto@email.com', '$2a$10$GmZpeKWzTBWSa/ME7bbmN.F3lmMUc5xqn4mlZJxbhqAual0zZ1wt2');
+INSERT INTO usuario (id, nome, email, senha) VALUES (10, 'Usuário Padrão', 'user@user.com', '$2a$10$GmZpeKWzTBWSa/ME7bbmN.F3lmMUc5xqn4mlZJxbhqAual0zZ1wt2');
+INSERT INTO usuario (id, nome, email, senha) VALUES (11, 'Maria Estudiosa', 'maria@email.com', '$2a$10$GmZpeKWzTBWSa/ME7bbmN.F3lmMUc5xqn4mlZJxbhqAual0zZ1wt2');
 
 -- INSERINDO DADOS BASE (Níveis, etc.)
 INSERT INTO nivel (id, codigo, descricao) VALUES (1, 'N001', 'Iniciante');
@@ -25,7 +25,7 @@ INSERT INTO conteudo (id, nome, nivel_id, tema_id) VALUES (1, 'Introduction to P
 INSERT INTO recurso (id, tipo, url, legenda, conteudo_id) VALUES (1, 'video', 'https://www.youtube.com/watch?v=DE8qVfNW5B0', 'Pensa nos pronomes como "apelidos" ou "atalhos" para os nomes das coisas, pessoas ou lugares (os substantivos). Em vez de ficar repetindo o mesmo nome toda hora, a gente usa um pronome para deixar a conversa mais fluida e menos repetitiva. A graça do vídeo é que os nomes dos personagens são pronomes, o que causa uma grande confusão.', 1);
 
 -- Recurso de Música (ID 2)
-INSERT INTO recurso (id, tipo, url, letra, conteudo_id) VALUES (2, 'musica', 'https://www.youtube.com/watch?v=pSw8an1u3rc', 'Imagine me and you, I do
+INSERT INTO recurso (id, tipo, url, legenda, conteudo_id) VALUES (2, 'musica', 'https://www.youtube.com/watch?v=pSw8an1u3rc', 'Imagine me and you, I do
 I think about you day and night, it''s only right
 To think about the girl you love and hold her tight
 So happy together

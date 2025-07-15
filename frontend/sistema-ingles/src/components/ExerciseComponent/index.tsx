@@ -10,10 +10,9 @@ import {
     FormControlLabel,
     FormControl,
     FormLabel,
-    Alert
+    Alert,
+    Stack
 } from '@mui/material';
-import { useRouter } from 'next/navigation';
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 
 // Tipo para os dados do exercício que ele recebe como props
 type ExerciseData = {
@@ -28,9 +27,8 @@ interface ExerciseComponentProps {
 }
 
 export default function ExerciseComponent({ data }: ExerciseComponentProps) {
-  const router = useRouter();
   
-  // Estados para gerenciar a interatividade
+  // Estados para gerenciar a interatividade de cada exercício individualmente
   const [selectedValue, setSelectedValue] = useState(''); // Guarda a opção que o usuário selecionou
   const [isSubmitted, setIsSubmitted] = useState(false); // Controla se o usuário já enviou a resposta
   const [isCorrect, setIsCorrect] = useState(false); // Controla se a resposta está correta
@@ -47,33 +45,24 @@ export default function ExerciseComponent({ data }: ExerciseComponentProps) {
     
     if (selectedValue === data.respostaCorreta) {
       setIsCorrect(true);
-      console.log("Resposta Correta!");
     } else {
       setIsCorrect(false);
-      console.log("Resposta Errada!");
     }
   };
 
   return (
     <Box>
-        <Button 
-            startIcon={<ArrowBackIcon />} 
-            onClick={() => router.back()} // Função para voltar para a página anterior
-            sx={{ mb: 2 }}
-        >
-            Voltar
-        </Button>
-        <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
+        <Typography variant="h6" component="h3" gutterBottom sx={{ fontWeight: 'bold' }}>
             {data.pergunta}
         </Typography>
 
-        {/* 1. Damos um 'id' para o nosso formulário */}
-        <Box component="form" id="exercise-form" onSubmit={handleSubmit} sx={{ mt: 3 }}>
+        <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+          <Stack spacing={2} alignItems="flex-start">
             <FormControl component="fieldset" disabled={isSubmitted}>
                 <FormLabel component="legend">Selecione uma alternativa:</FormLabel>
                 <RadioGroup
-                    aria-label="opcoes-exercicio"
-                    name="opcoes"
+                    aria-label={`opcoes-exercicio-${data.id}`}
+                    name={`opcoes-${data.id}`}
                     value={selectedValue}
                     onChange={handleRadioChange}
                 >
@@ -82,20 +71,19 @@ export default function ExerciseComponent({ data }: ExerciseComponentProps) {
                     ))}
                 </RadioGroup>
             </FormControl>
-            {/* O botão de enviar não está mais aqui dentro */}
+            
+            <Button
+                type="submit"
+                variant="contained"
+                sx={{ mt: 2 }}
+                disabled={!selectedValue || isSubmitted} // Desabilita se nada foi selecionado ou se já foi enviado
+            >
+                Verificar
+            </Button>
+          </Stack>
         </Box>
 
-        {/* 2. O botão agora está aqui fora, abaixo do form */}
-        <Button
-            type="submit"
-            form="exercise-form" // <-- E a gente diz a qual formulário ele pertence
-            variant="contained"
-            sx={{ mt: 2 }}
-            disabled={!selectedValue || isSubmitted}
-        >
-            Enviar
-        </Button>
-        {/* Mostra o feedback para o usuário depois que ele envia a resposta */}
+        {/* Feedback para o usuário após o envio */}
         {isSubmitted && (
             <Alert 
                 severity={isCorrect ? "success" : "error"} 

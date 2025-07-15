@@ -11,8 +11,7 @@ export default function Header() {
   const router = useRouter();
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  // No futuro, você pegaria o nome do usuário do token JWT ou de um estado global
-  const userName = "Neto"; 
+  const userName = "User"; 
 
   const handleMenu = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
@@ -31,12 +30,11 @@ export default function Header() {
   };
 
   return (
-    // Deixando o AppBar com uma cor mais clara, usando o padrão do tema
     <AppBar position="static" color="default" elevation={1}>
       <Toolbar>
         {/* Logo */}
         <Box sx={{ flexGrow: 1 }}>
-          <Link href="/conteudos" passHref>
+          <Link href="/Conteudos" passHref>
             <Image
               src="/LogoInglesVerso.png"
               alt="InglêsVerso Logo"
@@ -55,7 +53,7 @@ export default function Header() {
             aria-controls="menu-appbar"
             aria-haspopup="true"
             onClick={handleMenu}
-            color="inherit" // A cor do texto do botão vai ser escura
+            color="inherit"
             startIcon={<AccountCircle />}
           >
             <Typography variant="button">{userName}</Typography>

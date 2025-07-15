@@ -8,24 +8,21 @@ import {
     Button,
     CircularProgress,
     Alert,
-    Stack // Stack é ótimo para listas verticais com espaçamento
+    Stack 
 } from '@mui/material';
 import { useRouter } from 'next/navigation';
-import Link from 'next/link'; // Importando o Link para navegação
+import Link from 'next/link'; 
 import axios from 'axios';
 
-// Tipos de dados (não precisamos mais do Nivel aqui)
 type Conteudo = {
   id: number;
   nome: string;
-  // O progresso e o nível vêm do DTO completo, podemos adicionar depois
   progresso?: string;
 };
 
 export default function ContentDashboard() {
   const router = useRouter();
 
-  // Estados simplificados: só precisamos dos conteúdos, loading e erro
   const [conteudos, setConteudos] = useState<Conteudo[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -41,7 +38,6 @@ export default function ContentDashboard() {
       const headers = { 'Authorization': `Bearer ${token}` };
       
       try {
-        // Agora buscamos apenas os conteúdos
         const resConteudos = await axios.get('http://localhost:8080/api/conteudos', { headers });
         setConteudos(resConteudos.data);
       } catch (err) {
@@ -55,29 +51,24 @@ export default function ContentDashboard() {
     fetchData();
   }, [router]);
 
-  // Se estiver carregando, mostra o spinner
   if (loading) {
     return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}><CircularProgress /></Box>;
   }
 
-  // Se der erro, mostra um alerta
   if (error) {
     return <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>;
   }
 
   return (
     <Box>
-      {/* A seção de Níveis de Conhecimento foi removida */}
       
       <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold', mt: 2 }}>
         Lista de conteúdos
       </Typography>
       
-      {/* Usando o componente Stack para criar nossa lista de botões */}
       <Stack spacing={2} sx={{ mt: 2 }}>
         {conteudos.length > 0 ? (
           conteudos.map((conteudo, index) => (
-            // Cada item agora é um Link que envolve um Botão
             <Link key={conteudo.id} href={`/Conteudos/${conteudo.id}`} passHref style={{ textDecoration: 'none' }}>
               <Button
                 variant="outlined"
@@ -86,7 +77,7 @@ export default function ContentDashboard() {
                   p: 2, 
                   justifyContent: 'space-between', 
                   textAlign: 'left',
-                  textTransform: 'none' // Para o texto não ficar em maiúsculas
+                  textTransform: 'none' 
                 }}
               >
                 <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
