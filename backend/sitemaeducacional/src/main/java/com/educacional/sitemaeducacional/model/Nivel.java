@@ -1,11 +1,18 @@
 package com.educacional.sitemaeducacional.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 @Entity
 @Table(name = "nivel")
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 public class Nivel {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

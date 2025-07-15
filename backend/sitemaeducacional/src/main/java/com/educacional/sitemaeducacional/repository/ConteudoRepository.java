@@ -15,4 +15,6 @@ public interface ConteudoRepository extends JpaRepository<Conteudo, Long> {
     List<Conteudo> findByTemaNome(String nomeTema);
     
     Optional<Conteudo> findByNomeIgnoreCase(String nome);
+
+    Optional<Conteudo> findById(Long id);
 }

@@ -1,4 +1,4 @@
-'use client'; // Este componente precisa ser um Client Component por causa do useState e dos eventos
+'use client';
 
 import React, { useState } from 'react';
 import { Box, TextField, Button, Typography, Link, Container } from '@mui/material';
@@ -8,21 +8,19 @@ import axios from 'axios';
 export default function LoginForm() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [error, setError] = useState(''); // Estado para guardar a mensagem de erro
-  const router = useRouter(); // Hook para fazer o redirecionamento
+  const [error, setError] = useState('');
+  const router = useRouter();
 
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    setError(''); // Limpa erros anteriores
+    setError('');
 
     try {
-      // Chama a nossa API de backend!
       const response = await axios.post('http://localhost:8080/api/auth/login', {
         email: email,
         password: password,
       });
 
-      // Se der bom, a resposta terá o token
       const { token } = response.data;
       console.log('Login com sucesso! Token:', token);
 
@@ -30,11 +28,10 @@ export default function LoginForm() {
       localStorage.setItem('authToken', token);
       
       // Redireciona o usuário para a página principal ou dashboard
-      router.push('/Conteudos'); // Exemplo: redireciona para a página de conteúdos
+      router.push('/Conteudos'); 
 
     } catch (err: any) {
       console.error('Falha no login:', err);
-      // Pega a mensagem de erro da resposta da API, se tiver
       if (err.response && err.response.status === 401) {
         setError('E-mail ou senha inválidos. Tente novamente.');
       } else {
@@ -56,7 +53,7 @@ export default function LoginForm() {
           boxShadow: '0px 10px 25px rgba(0, 0, 0, 0.2)',
         }}
       > 
-        <Typography component="h1" variant="h5" color="text.primary">
+        <Typography component="h1" variant="h5" color="white">
           Login
         </Typography>
         
@@ -73,13 +70,13 @@ export default function LoginForm() {
             autoFocus
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            InputLabelProps={{ style: { color: 'text.secondary' } }}
+            InputLabelProps={{ style: { color: 'white' } }}
             sx={{
               '& .MuiOutlinedInput-root': {
                 '& fieldset': { borderColor: '#42a5f5' },
                 '&:hover fieldset': { borderColor: '#90caf9' },
                 '&.Mui-focused fieldset': { borderColor: 'secondary.main' },
-                '& input': { color: 'text.primary' },
+                '& input': { color: 'white' },
               },
             }}
           />
@@ -95,13 +92,13 @@ export default function LoginForm() {
             autoComplete="current-password"
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            InputLabelProps={{ style: { color: 'text.secondary' } }}
+            InputLabelProps={{ style: { color: 'white' } }}
             sx={{
               '& .MuiOutlinedInput-root': {
                 '& fieldset': { borderColor: '#42a5f5' },
                 '&:hover fieldset': { borderColor: '#90caf9' },
                 '&.Mui-focused fieldset': { borderColor: 'secondary.main' },
-                '& input': { color: 'text.primary' },
+                '& input': { color: 'white' },
               },
             }}
           />

@@ -1,95 +1,103 @@
 'use client';
 
-import React, { useState } from 'react';
-import { Box, Typography, Chip, List, ListItem, ListItemText, Button, Divider } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { 
+    Box, 
+    Typography, 
+    Chip, 
+    Button,
+    CircularProgress,
+    Alert,
+    Stack 
+} from '@mui/material';
 import { useRouter } from 'next/navigation';
-
-// Tipos para os dados que virão do backend
-type Nivel = {
-  id: number;
-  descricao: string;
-};
+import Link from 'next/link'; 
+import axios from 'axios';
 
 type Conteudo = {
   id: number;
   nome: string;
-  nivel: Nivel;
-  progresso?: string; // Ex: "0/10"
+  progresso?: string;
 };
 
-// Props que o componente vai receber da página (Server Component)
-interface ContentDashboardProps {
-  niveis: Nivel[];
-  conteudos: Conteudo[];
-}
-
-export default function ContentDashboard({ niveis, conteudos }: ContentDashboardProps) {
-  const [selectedNivelId, setSelectedNivelId] = useState<number | null>(null);
+export default function ContentDashboard() {
   const router = useRouter();
 
-  const handleNivelClick = (nivelId: number) => {
-    // Se o nível clicado já estiver selecionado, deseleciona (mostra todos)
-    setSelectedNivelId(prevId => (prevId === nivelId ? null : nivelId));
-  };
+  const [conteudos, setConteudos] = useState<Conteudo[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const handleAcessarClick = (conteudoId: number) => {
-    router.push(`/conteudos/${conteudoId}`);
-  };
+  useEffect(() => {
+    const fetchData = async () => {
+      const token = localStorage.getItem('authToken');
+      if (!token) {
+        router.push('/login');
+        return;
+      }
 
-  // Filtra os conteúdos com base no nível selecionado
-  const conteudosFiltrados = selectedNivelId
-    ? conteudos.filter(c => c.nivel.id === selectedNivelId)
-    : conteudos;
+      const headers = { 'Authorization': `Bearer ${token}` };
+      
+      try {
+        const resConteudos = await axios.get('http://localhost:8080/api/conteudos', { headers });
+        setConteudos(resConteudos.data);
+      } catch (err) {
+        console.error("Erro ao buscar dados:", err);
+        setError("Não foi possível carregar os conteúdos.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [router]);
+
+  if (loading) {
+    return <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}><CircularProgress /></Box>;
+  }
+
+  if (error) {
+    return <Alert severity="error" sx={{ mt: 2 }}>{error}</Alert>;
+  }
 
   return (
     <Box>
-      <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
-        Níveis de conhecimento
-      </Typography>
-      <Box sx={{ display: 'flex', gap: 1, mb: 4 }}>
-        {niveis.map((nivel) => (
-          <Chip
-            key={nivel.id}
-            label={nivel.descricao}
-            onClick={() => handleNivelClick(nivel.id)}
-            variant={selectedNivelId === nivel.id ? 'filled' : 'outlined'}
-            color={selectedNivelId === nivel.id ? 'primary' : 'default'}
-            sx={{ cursor: 'pointer' }}
-          />
-        ))}
-      </Box>
-
-      <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold' }}>
+      
+      <Typography variant="h5" component="h2" gutterBottom sx={{ fontWeight: 'bold', mt: 2 }}>
         Lista de conteúdos
       </Typography>
-      <List sx={{ bgcolor: 'background.paper', borderRadius: 2 }}>
-        {conteudosFiltrados.map((conteudo, index) => (
-          <React.Fragment key={conteudo.id}>
-            <ListItem
-              secondaryAction={
-                <Button variant="outlined" onClick={() => handleAcessarClick(conteudo.id)}>
-                  Acessar
-                </Button>
-              }
-            >
-              <ListItemText
-                primary={`${index + 1}. ${conteudo.nome}`}
-                primaryTypographyProps={{ fontWeight: 'medium' }}
-                secondary={
-                  <Chip 
-                    label={conteudo.progresso || '0/0'} 
-                    size="small" 
-                    sx={{ mt: 1 }} 
-                    variant="outlined" 
-                  />
-                }
-                secondaryTypographyProps={{ component: 'div' }}
-              />
-            </ListItem>
-            {index < conteudosFiltrados.length - 1 && <Divider component="li" />}
-          </React.Fragment>
-        ))}
-      </List>
+      
+      <Stack spacing={2} sx={{ mt: 2 }}>
+        {conteudos.length > 0 ? (
+          conteudos.map((conteudo, index) => (
+            <Link key={conteudo.id} href={`/Conteudos/${conteudo.id}`} passHref style={{ textDecoration: 'none' }}>
+              <Button
+                variant="outlined"
+                fullWidth
+                sx={{ 
+                  p: 2, 
+                  justifyContent: 'space-between', 
+                  textAlign: 'left',
+                  textTransform: 'none' 
+                }}
+              >
+                <Typography variant="body1" sx={{ fontWeight: 'medium' }}>
+                  {`${index + 1}. ${conteudo.nome}`}
+                </Typography>
+                
+                <Chip 
+                  label={conteudo.progresso || "0/10"} 
+                  size="small"
+                  variant="outlined" 
+                />
+              </Button>
+            </Link>
+          ))
+        ) : (
+          <Typography sx={{ p: 2, color: 'text.secondary' }}>
+            Nenhum conteúdo encontrado.
+          </Typography>
+        )}
+      </Stack>
     </Box>
   );
 }

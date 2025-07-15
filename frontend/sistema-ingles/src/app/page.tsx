@@ -1,5 +1,3 @@
-// Esta página pode até ser um Server Component que renderiza um Client Component.
-// Mas vamos manter o 'use client' por causa do ThemeProvider.
 'use client'; 
 
 import LoginForm from '@/components/CardLogin';
@@ -7,7 +5,6 @@ import { theme } from '@/theme';
 import { Box, CssBaseline } from '@mui/material';
 import { ThemeProvider } from '@mui/material/styles';
 import Image from 'next/image';
-// Importando nosso novo componente
 
 export default function LoginPage() {
   return (
@@ -29,7 +26,7 @@ export default function LoginPage() {
         style={{ marginBottom: '1rem' }}
         priority // Ajuda a carregar a logo mais rápido
       />
-      <LoginForm /> {/* Olha que beleza! Só chamar o componente aqui */}
+      <LoginForm />
     </Box>
   );
 }
